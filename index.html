@@ -92,36 +92,30 @@
     async function sendOTP() {
       const email = document.getElementById('email').value;
       if (!validateEmail(email)) return alert('Adresse email invalide.');
-
+    
+      const otpCode = Math.floor(100000 + Math.random() * 900000); // Génère un code 6 chiffres
+      localStorage.setItem('otp', otpCode); // Stocke le code localement
+    
+      const params = {
+        to_email: email,
+        code: otpCode,
+      };
+    
       try {
-        const response = await fetch('/send-otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
-        });
-        const result = await response.json();
-        if (result.success) {
-          alert(`Code OTP envoyé à ${email}`);
-          document.getElementById('otp-section').classList.remove('hidden');
-        } else {
-          alert('Erreur lors de l’envoi du code OTP.');
-        }
+        const res = await emailjs.send('service_f02ni9d', 'template_x96hkvm', params);
+        alert(`Code OTP envoyé à ${email}`);
+        document.getElementById('otp-section').classList.remove('hidden');
       } catch (e) {
-        alert('Erreur réseau.');
+        alert("Erreur lors de l'envoi de l'OTP.");
       }
     }
 
-    async function verifyOTP() {
-      const email = document.getElementById('email').value;
-      const code = document.getElementById('otp').value;
 
-      const response = await fetch('/verify-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, code })
-      });
-      const result = await response.json();
-      if (result.success) {
+    function verifyOTP() {
+      const inputCode = document.getElementById('otp').value;
+      const storedCode = localStorage.getItem('otp');
+    
+      if (inputCode === storedCode) {
         alert('Vérification réussie !');
         document.getElementById('page1').classList.add('hidden');
         document.getElementById('page2').classList.remove('hidden');
@@ -129,6 +123,7 @@
         alert('Code incorrect.');
       }
     }
+
 
     function validateEmail(email) {
       const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -161,6 +156,11 @@
 
     window.onload = setRegionTitle;
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    emailjs.init('oUM4U3ZEEAyVbQ1df'); 
+  </script>
+
 </head>
 <body>
   <header>
