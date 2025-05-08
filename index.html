@@ -65,45 +65,45 @@
   <script>
     const districts = [
       { name: 'Paris', lat: 48.8566, lon: 2.3522, email: 'paris@club.org' },
-      { name: 'Lyon', lat: 45.75, lon: 4.85, email: 'lyon@club.org' },
       { name: 'Marseille', lat: 43.2965, lon: 5.3698, email: 'marseille@club.org' },
-      { name: 'Lille', lat: 50.6292, lon: 3.0573, email: 'lille@club.org' },
-      { name: 'Toulouse', lat: 43.6047, lon: 1.4442, email: 'toulouse@club.org' }
+      { name: 'Lyon', lat: 45.75, lon: 4.85, email: 'lyon@club.org' },
+      { name: 'Toulouse', lat: 43.6047, lon: 1.4442, email: 'toulouse@club.org' },
+      { name: 'Nice', lat: 43.7102, lon: 7.2620, email: 'nice@club.org' },
+      { name: 'Nantes', lat: 47.2184, lon: -1.5536, email: 'nantes@club.org' },
+      { name: 'Strasbourg', lat: 48.5734, lon: 7.7521, email: 'strasbourg@club.org' },
+      { name: 'Montpellier', lat: 43.6119, lon: 3.8777, email: 'montpellier@club.org' },
+      { name: 'Bordeaux', lat: 44.8378, lon: -0.5792, email: 'bordeaux@club.org' },
+      { name: 'Lille', lat: 50.6292, lon: 3.0573, email: 'lille@club.org' }
     ];
 
     let selectedDistrict = null;
 
     async function setRegionTitle() {
-      const initGeo = async () => {
-        try {
-          const res = await fetch('https://ipapi.co/json/');
-          const data = await res.json();
-          const userLat = data.latitude;
-          const userLon = data.longitude;
+      try {
+        const res = await fetch('https://ipapi.co/json/');
+        const data = await res.json();
+        const userLat = data.latitude;
+        const userLon = data.longitude;
 
-          let minDistance = Infinity;
-          for (const district of districts) {
-            const distance = Math.sqrt(
-              Math.pow(userLat - district.lat, 2) +
-              Math.pow(userLon - district.lon, 2)
-            );
-            if (distance < minDistance) {
-              minDistance = distance;
-              selectedDistrict = district;
-            }
+        let minDistance = Infinity;
+        for (const district of districts) {
+          const distance = Math.sqrt(
+            Math.pow(userLat - district.lat, 2) +
+            Math.pow(userLon - district.lon, 2)
+          );
+          if (distance < minDistance) {
+            minDistance = distance;
+            selectedDistrict = district;
           }
-
-          if (selectedDistrict) {
-            document.getElementById('region-title').innerText = `Bienvenue à proximité de ${selectedDistrict.name}`;
-            document.getElementById('district-select').value = selectedDistrict.name;
-          }
-        } catch (e) {
-          document.getElementById('region-title').innerText = 'Bienvenue';
         }
-      };
 
-      document.addEventListener('click', initGeo, { once: true });
-      document.addEventListener('scroll', initGeo, { once: true });
+        if (selectedDistrict) {
+          document.getElementById('region-title').innerText = `Bienvenue à proximité de ${selectedDistrict.name}`;
+          document.getElementById('district-select').value = selectedDistrict.name;
+        }
+      } catch (e) {
+        document.getElementById('region-title').innerText = 'Bienvenue';
+      }
     }
 
     function updateManualDistrict(name) {
@@ -157,15 +157,11 @@
 </head>
 <body>
   <header>
-    <img src="https://www.rotary.org/sites/all/themes/rotary_rotaryorg/images/rotary-logo-color-2019-simplified.svg" alt="Logo" id="logo">
+    <img src="https://www.rotary.org/sites/all/themes/rotary_rotaryorg/images/rotary-logo-color-2019-simplified.svg" alt="Logo">
     <h1 id="region-title">Bienvenue</h1>
     <select id="district-select" onchange="updateManualDistrict(this.value)">
       <option value="">-- Choisissez votre ville --</option>
-      <option value="Paris">Paris</option>
-      <option value="Lyon">Lyon</option>
-      <option value="Marseille">Marseille</option>
-      <option value="Lille">Lille</option>
-      <option value="Toulouse">Toulouse</option>
+      ${districts.map(d => `<option value="${d.name}">${d.name}</option>`).join('')}
     </select>
   </header>
 
@@ -195,6 +191,7 @@
         <input name="metier" placeholder="Métier / Classification" required>
 
         <div class="checkbox-inline">
+          <input type="hidden" name="statut" value="">
           <label><input type="checkbox" name="statut" value="actif"> En Activité</label>
           <label><input type="checkbox" name="statut" value="retraite"> Retraité</label>
         </div>
@@ -204,7 +201,8 @@
         <input name="date_debut" placeholder="De (date départ)">
         <input name="date_fin" placeholder="À (date fin)">
         <input name="id_precedent" placeholder="Numéro d’identification précédent">
-        <label><input type="checkbox" name="transfert_recent"> Transfert Récent (moins d’un an)</label>
+        <input type="hidden" name="transfert_recent" value="false">
+        <label><input type="checkbox" name="transfert_recent" value="true"> Transfert Récent (moins d’un an)</label>
 
         <div class="checkbox-inline">
           <label><input type="checkbox" name="cat[]" value="inter"> Inter</label>
