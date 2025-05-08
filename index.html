@@ -89,47 +89,6 @@
       }
     }
 
-    async function sendOTP() {
-      const email = document.getElementById('email').value;
-      if (!validateEmail(email)) return alert('Adresse email invalide.');
-    
-      const otpCode = Math.floor(100000 + Math.random() * 900000); // Génère un code 6 chiffres
-      localStorage.setItem('otp', otpCode); // Stocke le code localement
-    
-      const params = {
-        to_email: email,
-        code: otpCode,
-      };
-    
-      try {
-        const res = await emailjs.send('service_f02ni9d', 'template_x96hkvm', params);
-        alert(`Code OTP envoyé à ${email}`);
-        document.getElementById('otp-section').classList.remove('hidden');
-      } catch (e) {
-        alert("Erreur lors de l'envoi de l'OTP.");
-      }
-    }
-
-
-    function verifyOTP() {
-      const inputCode = document.getElementById('otp').value;
-      const storedCode = localStorage.getItem('otp');
-    
-      if (inputCode === storedCode) {
-        alert('Vérification réussie !');
-        document.getElementById('page1').classList.add('hidden');
-        document.getElementById('page2').classList.remove('hidden');
-      } else {
-        alert('Code incorrect.');
-      }
-    }
-
-
-    function validateEmail(email) {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(email);
-    }
-
     function validateForm() {
       const requiredFields = document.querySelectorAll('#page2 input[required], #page2 textarea[required]');
       for (const field of requiredFields) {
@@ -145,42 +104,33 @@
     async function sendForm() {
       const formData = new FormData(document.getElementById('formulaire'));
       const data = Object.fromEntries(formData.entries());
-      const toEmail = selectedDistrict?.email || 'admin@club.org';
-      await fetch('/submit-form', {
+      data.district = selectedDistrict?.name || 'Inconnu';
+      data.toEmail = selectedDistrict?.email || 'admin@club.org';
+      await fetch('https://webhook.site/b1330eed-2f86-4f99-bdef-64902779fa76', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, toEmail })
+        body: JSON.stringify(data)
       });
       alert('Candidature envoyée !');
     }
 
-    window.onload = setRegionTitle;
+    window.onload = () => {
+      setRegionTitle();
+      document.getElementById('page1').classList.add('hidden');
+      document.getElementById('page2').classList.remove('hidden');
+    }
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <script>
-    emailjs.init('oUM4U3ZEEAyVbQ1df'); 
-  </script>
-
 </head>
 <body>
   <header>
-    <img src="logo.png" alt="Logo" id="logo">
+    <img src="https://www.rotary.org/sites/all/themes/rotary_rotaryorg/images/rotary-logo-color-2019-simplified.svg" alt="Logo" id="logo">
     <h1 id="region-title">Bienvenue</h1>
   </header>
 
   <main>
-    <div id="page1">
-      <h2>Identifiez-vous</h2>
-      <input type="email" id="email" placeholder="Votre adresse email" required>
-      <button onclick="sendOTP()">Envoyer le code OTP</button>
+    <div id="page1" class="hidden"></div>
 
-      <div id="otp-section" class="hidden">
-        <input type="text" id="otp" placeholder="Entrez le code OTP" required>
-        <button onclick="verifyOTP()">Vérifier</button>
-      </div>
-    </div>
-
-    <div id="page2" class="hidden">
+    <div id="page2">
       <form id="formulaire" onsubmit="event.preventDefault(); validateForm();">
         <h2>Je propose la candidature de</h2>
         <select name="titre" required>
