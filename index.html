@@ -261,7 +261,41 @@
     </div>
 
     <div id="page2" class="hidden">
-      <!-- le formulaire suit -->
+      <div id="page2" class="hidden">
+        <h2>Formulaire de parrainage</h2>
+        <form id="formulaire">
+          <label for="prenom">Prénom</label>
+          <input type="text" id="prenom" name="prenom" required>
+      
+          <label for="nom">Nom</label>
+          <input type="text" id="nom" name="nom" required>
+      
+          <label for="ville">Ville</label>
+          <input type="text" id="ville" name="ville" required>
+      
+          <label for="telephone">Téléphone</label>
+          <input type="tel" id="telephone" name="telephone" required>
+      
+          <label for="experience">Expérience professionnelle ou associative</label>
+          <textarea id="experience" name="experience" rows="4" required></textarea>
+      
+          <label for="disponibilite">Disponibilités (ex : soirs, week-ends)</label>
+          <input type="text" id="disponibilite" name="disponibilite" required>
+      
+          <label for="motivations">Quelles sont vos motivations pour rejoindre le Rotary ?</label>
+          <textarea id="motivations" name="motivations" rows="4" required></textarea>
+      
+          <div class="checkbox-inline">
+            <label>
+              <input type="checkbox" id="newsletter" name="newsletter">
+              Je souhaite recevoir des informations du Rotary
+            </label>
+          </div>
+      
+          <button type="button" onclick="validateForm()">Envoyer ma candidature</button>
+        </form>
+      </div>
+
     </div>
   </main>
 
