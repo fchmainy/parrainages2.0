@@ -57,6 +57,10 @@
       top: 1em;
       right: 1em;
     }
+    .checkbox-inline label {
+      display: inline-block;
+      margin-right: 1em;
+    }
   </style>
   <script>
     const districts = [
@@ -65,7 +69,6 @@
       { name: 'Marseille', lat: 43.2965, lon: 5.3698, email: 'marseille@club.org' },
       { name: 'Lille', lat: 50.6292, lon: 3.0573, email: 'lille@club.org' },
       { name: 'Toulouse', lat: 43.6047, lon: 1.4442, email: 'toulouse@club.org' }
-      // Ajouter ici les 45 autres villes si nécessaire
     ];
 
     let selectedDistrict = null;
@@ -191,8 +194,10 @@
         <input name="telephone" placeholder="Téléphone portable" required>
         <input name="metier" placeholder="Métier / Classification" required>
 
-        <label><input type="checkbox" name="statut" value="actif"> En Activité</label>
-        <label><input type="checkbox" name="statut" value="retraite"> Retraité</label>
+        <div class="checkbox-inline">
+          <label><input type="checkbox" name="statut" value="actif"> En Activité</label>
+          <label><input type="checkbox" name="statut" value="retraite"> Retraité</label>
+        </div>
 
         <h3>Informations supplémentaires</h3>
         <input name="club_precedent" placeholder="Club précédent">
@@ -201,12 +206,14 @@
         <input name="id_precedent" placeholder="Numéro d’identification précédent">
         <label><input type="checkbox" name="transfert_recent"> Transfert Récent (moins d’un an)</label>
 
-        <label><input type="checkbox" name="cat[]" value="inter"> Inter</label>
-        <label><input type="checkbox" name="cat[]" value="act"> Act</label>
-        <label><input type="checkbox" name="cat[]" value="ry"> Ry</label>
-        <label><input type="checkbox" name="cat[]" value="lo"> Lo</label>
-        <label><input type="checkbox" name="cat[]" value="echange"> Echange</label>
-        <label><input type="checkbox" name="cat[]" value="autre"> Autre</label>
+        <div class="checkbox-inline">
+          <label><input type="checkbox" name="cat[]" value="inter"> Inter</label>
+          <label><input type="checkbox" name="cat[]" value="act"> Act</label>
+          <label><input type="checkbox" name="cat[]" value="ry"> Ry</label>
+          <label><input type="checkbox" name="cat[]" value="lo"> Lo</label>
+          <label><input type="checkbox" name="cat[]" value="echange"> Echange</label>
+          <label><input type="checkbox" name="cat[]" value="autre"> Autre</label>
+        </div>
 
         <textarea name="motivations" placeholder="Description de vos motivations" required></textarea>
         <textarea name="programme_ancien" placeholder="Ancien du programme Club ou Fondation ? Précisez le programme et la période"></textarea>
