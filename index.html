@@ -202,6 +202,26 @@
       }
       document.getElementById('page1').classList.add('hidden');
       document.getElementById('page2').classList.remove('hidden');
+
+      // Inject form HTML here (if needed)
+      document.getElementById('page2').innerHTML = `
+        <h2>Formulaire de parrainage</h2>
+        <form id="formulaire">
+          <label for="prenom">Prénom</label>
+          <input type="text" id="prenom" name="prenom" required>
+
+          <label for="nom">Nom</label>
+          <input type="text" id="nom" name="nom" required>
+
+          <label for="email_parrain">Email du parrain</label>
+          <input type="email" id="email_parrain" name="email_parrain" required>
+
+          <label for="motivation">Motivations</label>
+          <textarea id="motivation" name="motivation" rows="4" required></textarea>
+
+          <button type="button" onclick="validateForm()">Envoyer</button>
+        </form>
+      `;
     }
 
     function validateForm() {
